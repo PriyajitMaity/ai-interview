@@ -19,8 +19,7 @@ const AuthForSchema = (type: FormType) =>
   });
 
 const AuthForm = ({ type }: { type: FormType }) => {
-
-  const router =useRouter();
+  const router = useRouter();
   const formSchema = AuthForSchema(type);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -35,12 +34,12 @@ const AuthForm = ({ type }: { type: FormType }) => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       if (type === "sign-up") {
-        toast.success('Account create successfully!!, Please Sign In..');
-        router.push('/sign-in');
+        toast.success("Account create successfully!!, Please Sign In..");
+        router.push("/sign-in");
         console.log("sign-up", values);
       } else {
-        toast.success('Sign In Successfull completed');
-        router.push('/');
+        toast.success("Sign In Successfull completed");
+        router.push("/");
         console.log("sign-in", values);
       }
     } catch (error) {

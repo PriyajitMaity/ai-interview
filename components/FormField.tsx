@@ -4,14 +4,14 @@ import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import { Input } from "./ui/input";
 
 interface FormFieldProps<T extends FieldValues> {
-    name: Path<T>,
-    control: Control<T>,
-    placeholder?: string,
-    label: string,
-    type?: 'text' | 'email' | 'password' | 'file'  
+  name: Path<T>;
+  control: Control<T>;
+  placeholder?: string;
+  label: string;
+  type?: "text" | "email" | "password";
 }
 
-const FormField = ({ name, control, label, placeholder, type }: FormFieldProps<T>) => (
+const FormField =<T extends FieldValues>({ name, control, label, placeholder, type }: FormFieldProps<T>) => (
   <Controller
     name={name}
     control={control}
