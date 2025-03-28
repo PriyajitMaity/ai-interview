@@ -50,7 +50,7 @@ const Agent = ({ userName }: AgentProps) => {
       </div>
 
       {message.length > 0 && (
-        <div className="transcript-border my-6">
+        <div className="transcript-border">
           <div className="transcript">
             <p
               key={lastMessage}
