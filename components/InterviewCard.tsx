@@ -5,9 +5,10 @@ import React from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import TechIcons from "./TechIcons";
+import { getFeedbackByInterviewId } from "@/lib/actions/general";
 
-const InterviewCard = ({ interviewId, userId, role, type, techstack, createdAt }: InterviewCardProps) => {
-  const feedback = null as Feedback | null;
+const InterviewCard = async({ interviewId, userId, role, type, techstack, createdAt }: InterviewCardProps) => {
+  const feedback = userId && interviewId ? await getFeedbackByInterviewId({ interviewId, userId }) : null;
   const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
 
   const badgeColor =

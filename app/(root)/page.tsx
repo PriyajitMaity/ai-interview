@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const page = async () => {
+const Home = async () => {
   const user = await getCurrentUser();
   const [userInterviews, allInterviews] = await Promise.all([
     getInterviewsByUserId(user?.id!),
@@ -33,7 +33,17 @@ const page = async () => {
         <h2>Your Interviews</h2>
         <div className="interviews-section">
           {pastInterview ? (
-            userInterviews?.map((interview) => <InterviewCard {...interview} key={interview.id} />)
+            userInterviews?.map((interview) => (
+              <InterviewCard
+                key={interview.id}
+                userId={user?.id}
+                interviewId={interview.id}
+                role={interview.role}
+                type={interview.type}
+                techstack={interview.techstack}
+                createdAt={interview.createdAt}
+              />
+            ))
           ) : (
             <p>You haven't taken any interviews yet</p>
           )}
@@ -44,7 +54,17 @@ const page = async () => {
         <h2>Take Interviews</h2>
         <div className="interviews-section">
           {upcomingInterviews ? (
-            allInterviews?.map((interview) => <InterviewCard {...interview} key={interview.id} />)
+            allInterviews?.map((interview) => (
+              <InterviewCard
+                key={interview.id}
+                userId={user?.id}
+                interviewId={interview.id}
+                role={interview.role}
+                type={interview.type}
+                techstack={interview.techstack}
+                createdAt={interview.createdAt}
+              />
+            ))
           ) : (
             <p>There are no interviews available</p>
           )}
@@ -54,4 +74,4 @@ const page = async () => {
   );
 };
 
-export default page;
+export default Home;
