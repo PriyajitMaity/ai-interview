@@ -1,11 +1,21 @@
 import InterviewCard from "@/components/InterviewCard";
 import { Button } from "@/components/ui/button";
-import { dummyInterviews } from "@/constants";
+import { getCurrentUser } from "@/lib/actions/auth";
+import { getInterviewsByUserId, getLatestInterviews } from "@/lib/actions/general";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const page = () => {
+const page = async () => {
+  const user = await getCurrentUser();
+  const [userInterviews, allInterviews] = await Promise.all([
+    getInterviewsByUserId(user?.id!),
+    getLatestInterviews({ userId: user?.id! }),
+  ]);
+
+  const pastInterview = userInterviews?.length! > 0;
+  const upcomingInterviews = allInterviews?.length! > 0;
+
   return (
     <>
       <section className="card-cta">
@@ -22,11 +32,8 @@ const page = () => {
       <section className="flex flex-col gap-6 mt-8">
         <h2>Your Interviews</h2>
         <div className="interviews-section">
-          {dummyInterviews ? (
-            dummyInterviews.map((interview) => 
-            <InterviewCard {...interview}
-             key={interview.id}
-            />)
+          {pastInterview ? (
+            userInterviews?.map((interview) => <InterviewCard {...interview} key={interview.id} />)
           ) : (
             <p>You haven't taken any interviews yet</p>
           )}
@@ -36,11 +43,8 @@ const page = () => {
       <section className="flex flex-col gap-6 mt-8">
         <h2>Take Interviews</h2>
         <div className="interviews-section">
-          {dummyInterviews ? (
-            dummyInterviews.map((interview) => 
-            <InterviewCard {...interview}
-            key={interview.id}
-            />)
+          {upcomingInterviews ? (
+            allInterviews?.map((interview) => <InterviewCard {...interview} key={interview.id} />)
           ) : (
             <p>There are no interviews available</p>
           )}
