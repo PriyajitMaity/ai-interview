@@ -1,5 +1,5 @@
 "use server";
-import Interview from "@/app/(root)/interview/page";
+
 import { feedbackSchema } from "@/constants";
 import { db } from "@/firebase/admin";
 import { google } from "@ai-sdk/google";
@@ -30,20 +30,17 @@ export async function getLatestInterviews(params: GetLatestInterviewsParams): Pr
   })) as Interview[];
 }
 
-export async function getInterviewById(id: string): Promise< Interview | null>{
-  const interview =await db.collection("interviews").doc(id).get();
+export async function getInterviewById(id: string): Promise<Interview | null> {
+  const interview = await db.collection("interviews").doc(id).get();
   return interview.data() as Interview | null;
 }
 
-export async function createFeedback(params: CreateFeedbackParams){
+export async function createFeedback(params: CreateFeedbackParams) {
   const { interviewId, userId, transcript, feedbackId } = params;
 
   try {
     const formattedTranscript = transcript
-      .map(
-        (sentence: { role: string; content: string }) =>
-          `- ${sentence.role}: ${sentence.content}\n`
-      )
+      .map((sentence: { role: string; content: string }) => `- ${sentence.role}: ${sentence.content}\n`)
       .join("");
 
     const { object } = await generateObject({
@@ -95,20 +92,20 @@ export async function createFeedback(params: CreateFeedbackParams){
   }
 }
 
-export async function getFeedbackByInterviewId(params: GetFeedbackByInterviewIdParams): Promise< Feedback | null> {
-  const { interviewId, userId } =params;
-  const querySnapshot =await db
-      .collection("feedback")
-      .where("interviewId", "==", interviewId)
-      .where("userId", "==", userId)
-      .limit(1)
-      .get();
+export async function getFeedbackByInterviewId(params: GetFeedbackByInterviewIdParams): Promise<Feedback | null> {
+  const { interviewId, userId } = params;
+  const querySnapshot = await db
+    .collection("feedback")
+    .where("interviewId", "==", interviewId)
+    .where("userId", "==", userId)
+    .limit(1)
+    .get();
 
-      if(querySnapshot.empty) return null;
+  if (querySnapshot.empty) return null;
 
-      const feedbackDoc =querySnapshot.docs[0];
-      return {
-        id: feedbackDoc.id, ...feedbackDoc.data()
-      } as Feedback;
-
+  const feedbackDoc = querySnapshot.docs[0];
+  return {
+    id: feedbackDoc.id,
+    ...feedbackDoc.data(),
+  } as Feedback;
 }
